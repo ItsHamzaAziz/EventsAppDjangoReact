@@ -22,7 +22,7 @@ const Home = () => {
             </Link>
           </div>
 
-          <div className='hidden md:block w-1/2'>
+          <div className='hidden md:block w-full md:w-1/2'>
             <img src={hero_image} alt="hero_image" className='w-full rounded-2xl h-full' />
           </div>
         </section>

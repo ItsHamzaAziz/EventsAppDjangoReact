@@ -17,6 +17,9 @@ module.exports = withMT({
       'green': '#009933',
       'blue': '#0000ff',
       'red': '#ff0000'
+    },
+    screens: {
+      'sm': '425'
     }
   },
   plugins: [],

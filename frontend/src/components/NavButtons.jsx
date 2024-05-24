@@ -35,11 +35,11 @@ const NavButtons = () => {
                             <Typography className="-mb-2" variant="h6">
                                 Your Email or Username
                             </Typography>
-                            <Input label="Email or Username" size="lg" />
+                            <Input label="Email or Username" type='text' size="lg" />
                             <Typography className="-mb-2" variant="h6">
                                 Your Password
                             </Typography>
-                            <Input label="Password" size="lg" />
+                            <Input label="Password" size="lg" type='password' />
                         </CardBody>
                         <CardFooter className="pt-0 space-y-2">
                             <button className='bg-green py-1 px-4 rounded-lg w-full text-white'>
@@ -69,19 +69,19 @@ const NavButtons = () => {
                             <Typography className="-mb-2" variant="h6">
                                 Your Email
                             </Typography>
-                            <Input label="Email" size="lg" />
+                            <Input label="Email" type='email' size="lg" required />
                             <Typography className="-mb-2" variant="h6">
                                 Your Username
                             </Typography>
-                            <Input label="Username" size="lg" />
+                            <Input label="Username" type='text' size="lg" required />
                             <Typography className="-mb-2" variant="h6">
                                 Your Password
                             </Typography>
-                            <Input label="Password" size="lg" />
+                            <Input label="Password" type='password' size="lg" required />
                             <Typography className="-mb-2" variant="h6">
                                 Re Enter Password
                             </Typography>
-                            <Input label="Re Enter Password" size="lg" />
+                            <Input label="Re Enter Password" type='password' size="lg" required />
                         </CardBody>
                         <CardFooter className="pt-0 space-y-2">
                             <button className='bg-blue text-white py-1 px-4 rounded-lg w-full'>
