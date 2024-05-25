@@ -6,7 +6,7 @@ const BrowseEvents = () => {
   return (
     <>
       <Navbar />
-      <section className='px-10 md:px-20 py-10'>
+      <section className='px-5 md:px-20 py-10'>
         <h2 className='text-3xl font-bold'>Trusted by<br />Thousands of Events</h2>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 py-10'>

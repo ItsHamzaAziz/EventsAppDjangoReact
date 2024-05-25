@@ -17,9 +17,9 @@ const Navbar = () => {
   const closeDrawerRight = () => setOpenRight(false)
 
   return (
-    <nav className='flex justify-around items-center p-2 pt-3 mb-4'>
+    <nav className='flex justify-evenly items-center py-2 pt-3 mb-4'>
       <div className='flex items-center space-x-2'>
-        <img src={logo} alt="logo" width={50} height={50} className='rounded-lg' />
+        <img src={logo} alt="logo" width={50} height={50} className='rounded-full' />
         <span className='text-xl font-serif'>Eventy</span>
       </div>
 

@@ -22,7 +22,7 @@ const CreateEvent = () => {
     <>
       <Navbar />
 
-      <section className='px-10 md:px-20 py-10'>
+      <section className='px-5 md:px-20 py-10'>
         <h1 className='text-4xl font-bold'>Create Event</h1>
 
         <form className='mt-10 space-y-4'>
@@ -57,7 +57,7 @@ const CreateEvent = () => {
                 }
               </div>
               <label htmlFor="image" className='text-center block bg-blue text-white py-2 rounded-b-md rounded-bl-md cursor-pointer'>
-                Upload File
+                Upload Image
                 <input type="file"
                   name="image"
                   id="image"
