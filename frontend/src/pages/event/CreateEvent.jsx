@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from '../../components/Navbar'
 import { Input, Select, Option, Textarea } from '@material-tailwind/react'
+import api from '../../api'
 
 const CreateEvent = () => {
   const [image, setImage] = useState(null)
   const [minDateTime, setMinDateTime] = useState('')
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
+    getCurrentDateTime()
+    getCategories()
+  }, [])
+
+  const getCategories = () => {
+    api.get('event/get-categories/')
+      .then(response => {
+        setCategories(response.data)
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  const getCurrentDateTime = () => {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -16,7 +34,7 @@ const CreateEvent = () => {
 
     const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
     setMinDateTime(currentDateTime);
-  }, [])
+  }
 
   return (
     <>
@@ -29,11 +47,12 @@ const CreateEvent = () => {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <Input label='Event Title' required />
 
-            <Select label='Select Category' required >
-              <Option value='1'>General</Option>
-              <Option value='2'>IT & Tech</Option>
-              <Option value='3'>Art & Culture</Option>
-              <Option value='4'>Education</Option>
+            <Select label='Select Category' required>
+              {
+                categories.map(category => (
+                  <Option key={ category.uuid } value={ category.uuid }>{ category.name }</Option>
+                ))
+              }
             </Select>
           </div>
 
