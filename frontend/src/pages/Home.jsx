@@ -24,9 +24,7 @@ const Home = () => {
             </Link>
           </div>
 
-          {/* <div className='hidden md:block w-full md:w-1/2'> */}
           <img src={hero_image} alt="hero_image" className='hidden md:block w-full md:w-1/2 rounded-3xl h-full shadow-md shadow-gray-500' />
-          {/* </div> */}
         </section>
 
 

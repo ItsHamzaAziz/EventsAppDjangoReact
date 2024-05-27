@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '../../components/Navbar'
 import { Input, Select, Option, Textarea } from '@material-tailwind/react'
 import api from '../../api'
+import ProtectedRoute from '../../components/ProtectedRoute'
 
 const CreateEvent = () => {
   const [image, setImage] = useState(null)
@@ -17,7 +18,6 @@ const CreateEvent = () => {
     api.get('event/get-categories/')
       .then(response => {
         setCategories(response.data)
-        console.log(response.data)
       })
       .catch(error => {
         console.log(error)
@@ -37,7 +37,7 @@ const CreateEvent = () => {
   }
 
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
 
       <section className='px-5 md:px-20 py-10'>
@@ -92,7 +92,7 @@ const CreateEvent = () => {
           <button type='submit' className='bg-blue text-white text-center w-full rounded-md py-2'>Submit</button>
         </form>
       </section>
-    </>
+    </ProtectedRoute>
   )
 }
 
