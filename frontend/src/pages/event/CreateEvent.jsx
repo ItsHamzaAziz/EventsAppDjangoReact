@@ -5,9 +5,15 @@ import api from '../../api'
 import ProtectedRoute from '../../components/ProtectedRoute'
 
 const CreateEvent = () => {
-  const [image, setImage] = useState(null)
   const [minDateTime, setMinDateTime] = useState('')
   const [categories, setCategories] = useState([])
+  
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [location, setLocation] = useState('')
+  const [image, setImage] = useState(null)
+  const [dateTime, setDateTime] = useState('')
+  const [category, setCategory] = useState('')
 
   useEffect(() => {
     getCurrentDateTime()
@@ -36,6 +42,24 @@ const CreateEvent = () => {
     setMinDateTime(currentDateTime);
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      const res = await api.post('/event/create-event/', { title, description, location, category, dateTime, image }, {
+        headers: {
+            'Content-Type':'multipart/form-data'
+        }
+      })
+
+      if (res.status === 200) {
+        console.log(res.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <ProtectedRoute>
       <Navbar />
@@ -43,21 +67,28 @@ const CreateEvent = () => {
       <section className='px-5 md:px-20 py-10'>
         <h1 className='text-4xl font-bold'>Create Event</h1>
 
-        <form className='mt-10 space-y-4'>
+        <form onSubmit={handleSubmit} className='mt-10 space-y-4'>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <Input label='Event Title' required />
+            <Input type='text'
+              label='Event Title'
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              required />
 
-            <Select label='Select Category' required>
+            <Select label='Select Category'>
               {
                 categories.map(category => (
-                  <Option key={ category.uuid } value={ category.uuid }>{ category.name }</Option>
+                  <Option key={ category.uuid } value={ category.uuid } onClick={ () => setCategory(category.uuid) }>{ category.name }</Option>
                 ))
               }
             </Select>
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <Textarea label='Event Description' required></Textarea>
+            <Textarea label='Event Description' 
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              required></Textarea>
 
             <div className='border border-gray-400 rounded-md'>
               <div className='flex justify-center items-center h-72'>
@@ -86,8 +117,18 @@ const CreateEvent = () => {
             </div>
           </div>
 
-          <Input type='text' label='Location' required />
-          <Input type='datetime-local' label='Date and Time' min={minDateTime} required />
+          <Input type='text' 
+            label='Location' 
+            value={location}
+            onChange={e => setLocation(e.target.value)}
+            required />
+
+          <Input type='datetime-local' 
+            label='Date and Time' 
+            min={minDateTime}
+            value={dateTime}
+            onChange={e => setDateTime(e.target.value)}
+            required />
 
           <button type='submit' className='bg-blue text-white text-center w-full rounded-md py-2'>Submit</button>
         </form>

@@ -11,6 +11,7 @@ import api from '../api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const NavButtons = () => {
     const navigate = useNavigate()
