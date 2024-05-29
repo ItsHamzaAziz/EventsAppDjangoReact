@@ -11,7 +11,7 @@ import api from '../api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { ThreeCircles } from 'react-loader-spinner';
 
 const NavButtons = () => {
     const navigate = useNavigate()
@@ -48,6 +48,10 @@ const NavButtons = () => {
     
     const [isAuthenticated, setIsAuthenticated] = useState(null)
 
+    const [loadingLogin, setLoadingLogin] = useState(false) 
+    const [loadingRegister, setLoadingRegister] = useState(false) 
+    
+
     useEffect(() => {
         try {
             const accessToken = localStorage.getItem(ACCESS_TOKEN)
@@ -59,8 +63,11 @@ const NavButtons = () => {
 
 
     async function loginUser() {
+        setLoadingLogin(true)
+
         if (!username || !password) {
             setErrorLogin("All fields are required")
+            setLoadingLogin(false)
             return
         }
 
@@ -70,33 +77,41 @@ const NavButtons = () => {
             if (res.status === 200) {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access)
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
+                setLoadingLogin(false)
 
                 handleOpenLogin()
                 navigate('/')
             } else {
                 setErrorLogin("Invalid Credentials")
+                setLoadingLogin(false)
                 return
             }
         } catch (err) {
             setErrorLogin("Error Occured")
+            setLoadingLogin(false)
             return
         }
     }
 
 
     async function registerUser() {
+        setLoadingRegister(true)
+
         if (!usernameRegister || !passwordRegister || !emailRegister || !passwordRegister2) {
             setErrorRegister("All fields are required")
+            setLoadingRegister(false)
             return
         }
 
         if (passwordRegister !== passwordRegister2) {
             setErrorRegister("Passwords do not match")
+            setLoadingRegister(false)
             return
         }
 
         if (!emailRegister.includes('@') || !emailRegister.includes('.')) {
             setErrorRegister("Enter a valid email address")
+            setLoadingRegister(false)
             return
         }
 
@@ -105,14 +120,17 @@ const NavButtons = () => {
 
             if (res.status === 200) {
                 if (res.data.message === "Username already exists") {
-                    setErrorRegister("Username already exists")
+                    setErrorRegister(res.data.message)
+                    setLoadingRegister(false)
                     return
                 }
                 else if (res.data.message === "Email already exists") {
                     setErrorRegister("Email already exists")
+                    setLoadingRegister(false)
                     return
                 }
 
+                setLoadingRegister(false)
                 setErrorRegister("")
                 setSuccessRegister(res.data.message)
                 setUsernameRegister("")
@@ -122,10 +140,12 @@ const NavButtons = () => {
                 return
             } else {
                 setErrorRegister("An error has occurred")
+                setLoadingRegister(false)
                 return
             }
         } catch (error) {
             setErrorRegister("An error has occurred")
+            setLoadingRegister(false)
             console.error(error)
             return
         }
@@ -170,10 +190,20 @@ const NavButtons = () => {
                                             onChange={e => setPasswordLogin(e.target.value)} />
                                     </CardBody>
                                     <CardFooter className="pt-0 space-y-2">
-                                        <button className='bg-green py-1 px-4 rounded w-full text-white' onClick={loginUser}>
-                                            Login
+                                        <button className='bg-green py-2 px-4 h-8 flex items-center justify-center rounded w-full text-white' onClick={loginUser}>
+                                            {
+                                                loadingLogin ? (
+                                                    <ThreeCircles
+                                                        color="white"
+                                                        height={15}
+                                                        width={15}
+                                                    />
+                                                ) : (
+                                                    'Login'
+                                                )
+                                            }
                                         </button>
-                                        <button className='bg-red text-white py-1 px-4 rounded w-full' onClick={handleOpenLogin}>
+                                        <button className='bg-red text-white py-1 px-4 h-8 rounded w-full' onClick={handleOpenLogin}>
                                             Close
                                         </button>
                                     </CardFooter>
@@ -241,10 +271,20 @@ const NavButtons = () => {
                                             required />
                                     </CardBody>
                                     <CardFooter className="pt-0 space-y-2">
-                                        <button className='bg-blue text-white py-1 px-4 rounded w-full' onClick={registerUser}>
-                                            Register
+                                        <button className='bg-blue text-white flex items-center justify-center py-1 px-4 h-8 rounded w-full' onClick={registerUser}>
+                                            {
+                                                loadingRegister ? (
+                                                    <ThreeCircles
+                                                        color="white"
+                                                        height={15}
+                                                        width={15}
+                                                    />
+                                                ) : (
+                                                    'Register'
+                                                )
+                                            }
                                         </button>
-                                        <button className='bg-red text-white py-1 px-4 rounded w-full' onClick={handleOpenRegister}>
+                                        <button className='bg-red text-white py-1 px-4 h-8 rounded w-full' onClick={handleOpenRegister}>
                                             Close
                                         </button>
                                     </CardFooter>

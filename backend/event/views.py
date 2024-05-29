@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Event, Category
 from .serializers import CategorySerializer, EventSerializer
 from rest_framework.response import Response
+from datetime import datetime
 
 # Create your views here.
 @api_view(['GET'])
@@ -22,14 +23,31 @@ def get_latest_events(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def create_event(request):
-    print(request.data)
-    print(request.user)
+    date_time = request.data.get('dateTime')
+    datetime_format = "%Y-%m-%dT%H:%M"
+    date_time = datetime.strptime(date_time, datetime_format)
 
-    return Response({'message': 'In View'})
+    event = Event.objects.create(
+        title = request.data.get('title'),
+        description = request.data.get('description'),
+        image = request.FILES.get('image'),
+        location = request.data.get('location'),
+        date_time = date_time,
+        category = Category.objects.get(pk=request.data.get('category')),
+        user = request.user
+    )
+
+    return Response({'message': 'Event created successfully', 'status': 200})
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_events(request):
+    events = Event.objects.all()
+    serializer = EventSerializer(events, many=True)
+    return Response(serializer.data)
 
 
 

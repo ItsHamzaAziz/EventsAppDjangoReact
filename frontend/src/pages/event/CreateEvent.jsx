@@ -3,6 +3,7 @@ import Navbar from '../../components/Navbar'
 import { Input, Select, Option, Textarea } from '@material-tailwind/react'
 import api from '../../api'
 import ProtectedRoute from '../../components/ProtectedRoute'
+import { ThreeCircles } from 'react-loader-spinner'
 
 const CreateEvent = () => {
   const [minDateTime, setMinDateTime] = useState('')
@@ -14,6 +15,11 @@ const CreateEvent = () => {
   const [image, setImage] = useState(null)
   const [dateTime, setDateTime] = useState('')
   const [category, setCategory] = useState('')
+
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     getCurrentDateTime()
@@ -43,7 +49,17 @@ const CreateEvent = () => {
   }
 
   const handleSubmit = async (e) => {
+    setLoading(true)
+    setError('')
+    setSuccess('')
+
     e.preventDefault()
+
+    if (!category) {
+      setError('Select a category')
+      setLoading(false)
+      return
+    }
 
     try {
       const res = await api.post('/event/create-event/', { title, description, location, category, dateTime, image }, {
@@ -53,10 +69,16 @@ const CreateEvent = () => {
       })
 
       if (res.status === 200) {
+        setSuccess('Event created successfully')
         console.log(res.data)
+        setLoading(false)
+      } else {
+        setError('An error occurred')
+        setLoading(false)
       }
     } catch (error) {
       console.log(error)
+      setError('An error occurred')
     }
   }
 
@@ -66,8 +88,25 @@ const CreateEvent = () => {
 
       <section className='px-5 md:px-20 py-10'>
         <h1 className='text-4xl font-bold'>Create Event</h1>
+        
+        {
+          error && (
+            <div className='text-center bg-red p-2 mt-5 text-white rounded-md'>
+              { error }
+            </div>
+          )
+        }
+        
+        {
+          success && (
+            <div className='text-center bg-green p-2 mt-5 text-white rounded-md'>
+              { success }
+            </div>
+          )
+        }
 
         <form onSubmit={handleSubmit} className='mt-10 space-y-4'>
+
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <Input type='text'
               label='Event Title'
@@ -130,7 +169,19 @@ const CreateEvent = () => {
             onChange={e => setDateTime(e.target.value)}
             required />
 
-          <button type='submit' className='bg-blue text-white text-center w-full rounded-md py-2'>Submit</button>
+          <button type='submit' className='bg-blue flex justify-center items-center text-white text-center w-full rounded-md py-2 h-10'>
+            {
+              loading ? (
+                <ThreeCircles 
+                  color='white'
+                  width={20}
+                  height={20}
+                />
+              ) : (
+                'Submit'
+              )
+            }
+          </button>
         </form>
       </section>
     </ProtectedRoute>
