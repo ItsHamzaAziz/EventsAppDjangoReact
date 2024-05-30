@@ -151,7 +151,9 @@ const CreateEvent = () => {
                   name="image"
                   id="image"
                   className='hidden'
-                  onChange={e => setImage(e.target.files[0])} />
+                  onChange={e => setImage(e.target.files[0])} 
+                  required 
+                />
               </label>
             </div>
           </div>
@@ -163,7 +165,7 @@ const CreateEvent = () => {
             required />
 
           <Input type='datetime-local' 
-            label='Date and Time' 
+            label='Date and Time (Local)' 
             min={minDateTime}
             value={dateTime}
             onChange={e => setDateTime(e.target.value)}

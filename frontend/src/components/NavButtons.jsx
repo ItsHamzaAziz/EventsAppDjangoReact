@@ -64,6 +64,7 @@ const NavButtons = () => {
 
     async function loginUser() {
         setLoadingLogin(true)
+        setErrorLogin("")
 
         if (!username || !password) {
             setErrorLogin("All fields are required")
@@ -96,6 +97,8 @@ const NavButtons = () => {
 
     async function registerUser() {
         setLoadingRegister(true)
+        setSuccessRegister("")
+        setErrorRegister("")
 
         if (!usernameRegister || !passwordRegister || !emailRegister || !passwordRegister2) {
             setErrorRegister("All fields are required")
