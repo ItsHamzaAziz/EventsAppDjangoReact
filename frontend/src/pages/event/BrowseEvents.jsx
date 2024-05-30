@@ -8,7 +8,8 @@ const BrowseEvents = () => {
   const [categories, setCategories] = useState([])
   const [events, setEvents] = useState([])
 
-  const [category, setCategory] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   const [loading, setLoading] = useState(true)
 
@@ -41,6 +42,11 @@ const BrowseEvents = () => {
       })
   }
 
+  const filteredEvents = events.filter(event =>
+    event.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (selectedCategory ? event.category.uuid === selectedCategory : true)
+  )
+
   return (
     <>
       <Navbar />
@@ -48,11 +54,14 @@ const BrowseEvents = () => {
         <h2 className='text-3xl font-bold'>Trusted by<br />Thousands of Events</h2>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 py-10'>
-          <Input className='text-black' label='Search Event' />
+          <Input className='text-black' 
+            label='Search Event'
+            onChange={e => setSearchTerm(e.target.value)}
+          />
           <Select label='Filter by Categories'>
             {
               categories.map(category => (
-                <Option key={ category.uuid } value={ category.uuid } onClick={ () => setCategory(category.uuid) }>{ category.name }</Option>
+                <Option key={ category.uuid } value={ category.uuid } onClick={ () => setSelectedCategory(category.uuid) }>{ category.name }</Option>
               ))
             }
           </Select>
@@ -70,7 +79,7 @@ const BrowseEvents = () => {
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-2 laptop:grid-cols-3 gap-4 mx-5 md:mx-20 mb-10'>
               {
-                events.map(event => (
+                filteredEvents.map(event => (
                   <div key={ event.uuid } className='rounded-lg border border-gray-300 shadow-md p-5 flex flex-col justify-between space-y-2'>
                     <div className='space-y-3'>
                       <img 
@@ -91,9 +100,7 @@ const BrowseEvents = () => {
               }
             </div>
           )
-        }
-
-        
+        }        
       </section>
     </>
   )

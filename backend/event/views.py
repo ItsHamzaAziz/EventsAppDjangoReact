@@ -18,7 +18,7 @@ def get_categories(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_latest_events(request):
-    events = Event.objects.order_by('-date_time')[:12]
+    events = Event.objects.order_by('date_time')[:6]
     serializer = EventSerializer(events, many=True)
     return Response(serializer.data)
 
