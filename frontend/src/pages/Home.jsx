@@ -15,7 +15,7 @@ const Home = () => {
 
   const getEvents = () => {
     setLoading(true)
-    api.get('event/get-latest-events/')
+    api.get('event/latest-events/')
      .then(response => {
         setEvents(response.data)
         console.log(response.data)

@@ -3,6 +3,7 @@ import Navbar from '../../components/Navbar'
 import { Input, Select, Option } from '@material-tailwind/react'
 import api from '../../api'
 import { ThreeDots } from 'react-loader-spinner'
+import { Link } from 'react-router-dom'
 
 const BrowseEvents = () => {
   const [categories, setCategories] = useState([])
@@ -31,12 +32,12 @@ const BrowseEvents = () => {
   const getEvents = () => {
     setLoading(true)
     api.get('event/get-events/')
-     .then(response => {
+      .then(response => {
         setEvents(response.data)
         console.log(response.data)
         setLoading(false)
       })
-     .catch(error => {
+      .catch(error => {
         console.log(error)
         setLoading(false)
       })
@@ -54,14 +55,14 @@ const BrowseEvents = () => {
         <h2 className='text-3xl font-bold'>Trusted by<br />Thousands of Events</h2>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 py-10'>
-          <Input className='text-black' 
+          <Input className='text-black'
             label='Search Event'
             onChange={e => setSearchTerm(e.target.value)}
           />
           <Select label='Filter by Categories'>
             {
               categories.map(category => (
-                <Option key={ category.uuid } value={ category.uuid } onClick={ () => setSelectedCategory(category.uuid) }>{ category.name }</Option>
+                <Option key={category.uuid} value={category.uuid} onClick={() => setSelectedCategory(category.uuid)}>{category.name}</Option>
               ))
             }
           </Select>
@@ -80,27 +81,29 @@ const BrowseEvents = () => {
             <div className='grid grid-cols-1 md:grid-cols-2 laptop:grid-cols-3 gap-4 mx-5 md:mx-20 mb-10'>
               {
                 filteredEvents.map(event => (
-                  <div key={ event.uuid } className='rounded-lg border border-gray-300 shadow-md p-5 flex flex-col justify-between space-y-2'>
-                    <div className='space-y-3'>
-                      <img 
-                        src={`${import.meta.env.VITE_API_URL}${ event.image }`} 
-                        alt="Event Image"
-                        className='w-full h-56 rounded-lg'
-                      />
-                      <h1 className='text-2xl font-bold'>{ event.title }</h1>
-                      <div>
-                        <p>{ event.location }</p>
-                        <p>{ event.date_time }</p>
+                  <Link key={event.uuid} to={`/event/${event.uuid}`}>
+                    <div className='rounded-lg h-full border border-gray-300 shadow-md p-5 flex flex-col justify-between space-y-2'>
+                      <div className='space-y-3'>
+                        <img
+                          src={`${import.meta.env.VITE_API_URL}${event.image}`}
+                          alt="Event Image"
+                          className='w-full h-56 rounded-lg'
+                        />
+                        <h1 className='text-2xl font-bold'>{event.title}</h1>
+                        <div>
+                          <p>{event.location}</p>
+                          <p>{event.date_time}</p>
+                        </div>
                       </div>
+
+                      <p>Category: {event.category.name}</p>
                     </div>
-                    
-                    <p>Category: { event.category.name }</p>
-                  </div>
+                  </Link>
                 ))
               }
             </div>
           )
-        }        
+        }
       </section>
     </>
   )

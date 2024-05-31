@@ -50,6 +50,13 @@ def get_events(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_event_details(request, pk):
+    event = Event.objects.get(pk=pk)
+    serializer = EventSerializer(event, many=False)
+    return Response(serializer.data)
+
 
 
 
