@@ -27,7 +27,7 @@ const CreateEvent = () => {
   }, [])
 
   const getCategories = () => {
-    api.get('event/get-categories/')
+    api.get('/event/get-categories/')
       .then(response => {
         setCategories(response.data)
       })

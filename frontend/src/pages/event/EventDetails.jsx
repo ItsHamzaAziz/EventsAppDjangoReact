@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom'
 import api from '../../api'
 import Navbar from '../../components/Navbar'
 import { ThreeCircles } from 'react-loader-spinner'
+import { jwtDecode } from 'jwt-decode'
+import { ACCESS_TOKEN } from '../../constants'
+import { Link } from 'react-router-dom'
 
 const EventDetails = () => {
   const { id } = useParams()
@@ -10,16 +13,25 @@ const EventDetails = () => {
   const [event, setEvent] = useState({})
 
   const [username, setUsername] = useState('')
+  const [userId, setUserId] = useState(0)
   const [category, setCategory] = useState('')
+
+  const [userIdToken, setUserIdToken] = useState(0)
 
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    getEventDetails()
+    getCurrentUser()
+  }, [])
+
+  const getEventDetails = () => {
     setLoading(true)
-    api.get(`event/event-details/${id}/`)
+    api.get(`/event/handle-event/${id}/`)
       .then(response => {
         setEvent(response.data)
         setUsername(response.data.user.username)
+        setUserId(response.data.user.id)
         setCategory(response.data.category.name)
         setLoading(false)
       })
@@ -27,7 +39,16 @@ const EventDetails = () => {
         console.log(error)
         setLoading(false)
       })
-  }, [])
+  }
+
+  const getCurrentUser = () => {
+    const token = localStorage.getItem(ACCESS_TOKEN)
+
+    if (token) {
+      const decodedToken = jwtDecode(token)
+      setUserIdToken(decodedToken.user_id)
+    }
+  }
 
 
   return (
@@ -54,6 +75,17 @@ const EventDetails = () => {
                 <h1 className='font-bold text-3xl'>{event.title}</h1>
                 <p>Event by {username}</p>
               </div>
+
+              {
+                userId === userIdToken && (
+                  <div className='text-white text-center md:text-left space-x-2'>
+                    <Link to={`/update-event/${ event.uuid }`}>
+                      <button className='bg-blue px-5 py-1 rounded'>Update</button>
+                    </Link>
+                    <button className='bg-red px-5 py-1 rounded'>Delete</button>
+                  </div>
+                )
+              }
 
               <div>
                 <p><span className='font-bold'>Location:</span> {event.location}</p>

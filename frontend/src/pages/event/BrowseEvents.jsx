@@ -20,7 +20,7 @@ const BrowseEvents = () => {
   }, [])
 
   const getCategories = () => {
-    api.get('event/get-categories/')
+    api.get('/event/get-categories/')
       .then(response => {
         setCategories(response.data)
       })
@@ -31,10 +31,9 @@ const BrowseEvents = () => {
 
   const getEvents = () => {
     setLoading(true)
-    api.get('event/get-events/')
+    api.get('/event/get-events/')
       .then(response => {
         setEvents(response.data)
-        console.log(response.data)
         setLoading(false)
       })
       .catch(error => {

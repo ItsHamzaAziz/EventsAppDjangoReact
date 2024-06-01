@@ -50,14 +50,41 @@ def get_events(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 @permission_classes([AllowAny])
-def get_event_details(request, pk):
-    event = Event.objects.get(pk=pk)
-    serializer = EventSerializer(event, many=False)
-    return Response(serializer.data)
+def handle_event(request, pk):
+    if request.method == 'GET':
+        event = Event.objects.get(pk=pk)
+        serializer = EventSerializer(event, many=False)
+        return Response(serializer.data)
+    
+    if request.method == 'PUT':
+        date_time = request.data.get('dateTime')
+        datetime_format = "%Y-%m-%dT%H:%M"
+        date_time = datetime.strptime(date_time, datetime_format)
 
+        if request.FILES.get('image'):
+            event = Event(
+                title = request.data.get('title'),
+                description = request.data.get('description'),
+                image = request.FILES.get('image'),
+                location = request.data.get('location'),
+                date_time = date_time,
+                category = Category.objects.get(pk=request.data.get('category')),   
+                pk = pk
+            )
+        else:
+            event = Event(
+                title = request.data.get('title'),
+                description = request.data.get('description'),
+                location = request.data.get('location'),
+                date_time = date_time,
+                category = Category.objects.get(pk=request.data.get('category')),   
+                pk = pk
+            )
 
+        event.save()
 
+        return Response({'message': 'Event updated successfully', 'status': 200})
 
 
