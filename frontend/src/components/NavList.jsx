@@ -30,7 +30,7 @@ const NavList = () => {
               <Link to={'/create-event'}>Create Event</Link>
             </li>
             <li>
-              <Link to={'/profile'}>Profile</Link>
+              <Link to={'/my-events'}>My Events</Link>
             </li>
           </>
         )

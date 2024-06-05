@@ -18,24 +18,20 @@ def get_categories(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_latest_events(request):
-    events = Event.objects.order_by('date_time')[:6]
+    events = Event.objects.order_by('-created_at')[:6]
     serializer = EventSerializer(events, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_event(request):
-    date_time = request.data.get('dateTime')
-    datetime_format = "%Y-%m-%dT%H:%M"
-    date_time = datetime.strptime(date_time, datetime_format)
-
     event = Event.objects.create(
         title = request.data.get('title'),
         description = request.data.get('description'),
         image = request.FILES.get('image'),
         location = request.data.get('location'),
-        date_time = date_time,
-        category = Category.objects.get(pk=request.data.get('category')),
+        category = Category.objects.get(uuid=request.data.get('category')),
+        date_and_time = request.data.get('dateTime'),
         user = request.user
     )
 
@@ -45,46 +41,52 @@ def create_event(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_events(request):
-    events = Event.objects.order_by('date_time')
+    events = Event.objects.order_by('-created_at')
     serializer = EventSerializer(events, many=True)
     return Response(serializer.data)
 
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET'])
 @permission_classes([AllowAny])
+def get_event_details(request, pk):
+    event = Event.objects.get(pk=pk)
+    serializer = EventSerializer(event, many=False)
+    return Response(serializer.data)
+
+
+
+@api_view(['PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def handle_event(request, pk):
-    if request.method == 'GET':
-        event = Event.objects.get(pk=pk)
-        serializer = EventSerializer(event, many=False)
-        return Response(serializer.data)
-    
     if request.method == 'PUT':
-        date_time = request.data.get('dateTime')
-        datetime_format = "%Y-%m-%dT%H:%M"
-        date_time = datetime.strptime(date_time, datetime_format)
+        event = Event.objects.get(pk=pk)
 
         if request.FILES.get('image'):
-            event = Event(
-                title = request.data.get('title'),
-                description = request.data.get('description'),
-                image = request.FILES.get('image'),
-                location = request.data.get('location'),
-                date_time = date_time,
-                category = Category.objects.get(pk=request.data.get('category')),   
-                pk = pk
-            )
+            print(request.data)
+            event.title = request.data.get('title')
+            event.description = request.data.get('description')
+            event.image = request.FILES.get('image')
+            event.location = request.data.get('location')
+            event.date_and_time = request.data.get('dateTime')
+            event.category = Category.objects.get(name=request.data.get('categorySelected'))
         else:
-            event = Event(
-                title = request.data.get('title'),
-                description = request.data.get('description'),
-                location = request.data.get('location'),
-                date_time = date_time,
-                category = Category.objects.get(pk=request.data.get('category')),   
-                pk = pk
-            )
+            print(request.data)
+            event.title = request.data.get('title')
+            event.description = request.data.get('description')
+            event.location = request.data.get('location')
+            event.date_and_time = request.data.get('dateTime')
+            event.category = Category.objects.get(name=request.data.get('categorySelected'))
 
         event.save()
 
         return Response({'message': 'Event updated successfully', 'status': 200})
+    
+    elif request.method == 'DELETE':
+        event = Event.objects.get(pk=pk)
+        event.delete()
+
+        return Response({'message': 'Event deleted successfully', 'status': 200})
+
+
 
 

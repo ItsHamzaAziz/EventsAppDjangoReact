@@ -9,7 +9,6 @@ import { useParams } from 'react-router-dom'
 const UpdateEvent = () => {
   const { id } = useParams()
 
-  const [minDateTime, setMinDateTime] = useState('')
   const [categories, setCategories] = useState([])
 
   const [event, setEvent] = useState({})
@@ -20,17 +19,15 @@ const UpdateEvent = () => {
   const [image, setImage] = useState(null)
   const [categorySelected, setCategorySelected] = useState('')
 
-  const [eventCategory, setEventCategory] = useState('')
-  const [formattedDateTime, setFormattedDateTime] = useState('')
+  const [dateTime, setDateTime] = useState('')
 
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  const [loadingSubmit, setLoading] = useState(false)
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
   const [loadingEventDetails, setLoadingEventDetails] = useState(true)
 
   useEffect(() => {
-    getCurrentDateTime()
     getCategories()
     getEventDetails()
   }, [])
@@ -47,35 +44,35 @@ const UpdateEvent = () => {
 
   const getEventDetails = () => {
     setLoadingEventDetails(true)
-    api.get(`/event/handle-event/${id}/`)
+    api.get(`/event/get-event-details/${id}/`)
       .then(response => {
         setEvent(response.data)
         
         setTitle(response.data.title)
         setDescription(response.data.description)
         setLocation(response.data.location)
-        setEventCategory(response.data.category.name)
         setCategorySelected(response.data.category.name)
-        formatDateTime(response.data.date_time)
+        setDateTime(response.data.date_and_time)
 
         setLoadingEventDetails(false)
       })
       .catch(error => {
         console.log(error)
         setLoadingEventDetails(false)
+        setLoadingSubmit(false)
       })
   }
 
   const handleSubmit = async (e) => {
-    setLoading(true)
+    e.preventDefault()
+
+    setLoadingSubmit(true)
     setError('')
     setSuccess('')
 
-    e.preventDefault()
-
 
     try {
-      const res = await api.put('/event/handle-event/', { title, description, location, categorySelected, formattedDateTime, image }, {
+      const res = await api.put(`/event/handle-event/${ id }/`, { title, description, location, categorySelected, dateTime, image }, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -84,41 +81,19 @@ const UpdateEvent = () => {
       if (res.status === 200) {
         setSuccess('Event updated successfully')
         console.log(res.data)
-        setLoading(false)
+        setLoadingSubmit(false)
       } else {
         setError('An error occurred')
-        setLoading(false)
+        setLoadingSubmit(false)
       }
     } catch (error) {
       console.log(error)
       setError('An error occurred')
+      setLoadingSubmit(false)
     }
   }
 
-  const formatDateTime = (dateTime) => {
-    const date = new Date(dateTime);
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-
-    const formatted = `${year}-${month}-${day}T${hours}:${minutes}`;
-    setFormattedDateTime(formatted)
-  }
-
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
-    setMinDateTime(currentDateTime);
-  }
 
   return (
     <ProtectedRoute>
@@ -202,7 +177,6 @@ const UpdateEvent = () => {
                       name="image"
                       className='hidden'
                       onChange={e => setImage(e.target.files[0])}
-                      required
                     />
                   </label>
                 </div>
@@ -214,12 +188,12 @@ const UpdateEvent = () => {
                 onChange={e => setLocation(e.target.value)}
                 required />
 
-              <Input type='datetime-local'
+              <Input type='text'
                 label='Date and Time (Local)'
-                min={minDateTime}
-                value={ formattedDateTime }
-                onChange={e => setFormattedDateTime(e.target.value)}
-                required />
+                value={ dateTime }
+                onChange={e => setDateTime(e.target.value)}
+                required
+              />
 
               <button type='submit' className='bg-blue flex justify-center items-center text-white text-center w-full rounded-md py-2 h-10'>
                 {

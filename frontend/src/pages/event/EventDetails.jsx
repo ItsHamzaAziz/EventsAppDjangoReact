@@ -27,7 +27,7 @@ const EventDetails = () => {
 
   const getEventDetails = () => {
     setLoading(true)
-    api.get(`/event/handle-event/${id}/`)
+    api.get(`/event/get-event-details/${id}/`)
       .then(response => {
         setEvent(response.data)
         setUsername(response.data.user.username)
@@ -89,7 +89,7 @@ const EventDetails = () => {
 
               <div>
                 <p><span className='font-bold'>Location:</span> {event.location}</p>
-                <p><span className='font-bold'>At:</span> {event.date_time}</p>
+                <p><span className='font-bold'>At:</span> {event.date_and_time}</p>
               </div>
 
               <p><span className='font-bold'>Category:</span> {category}</p>

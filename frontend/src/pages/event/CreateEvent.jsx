@@ -6,7 +6,6 @@ import ProtectedRoute from '../../components/ProtectedRoute'
 import { ThreeCircles } from 'react-loader-spinner'
 
 const CreateEvent = () => {
-  const [minDateTime, setMinDateTime] = useState('')
   const [categories, setCategories] = useState([])
   
   const [title, setTitle] = useState('')
@@ -22,7 +21,6 @@ const CreateEvent = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    getCurrentDateTime()
     getCategories()
   }, [])
 
@@ -36,18 +34,7 @@ const CreateEvent = () => {
       })
   }
 
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
-    setMinDateTime(currentDateTime);
-  }
-
+  
   const handleSubmit = async (e) => {
     setLoading(true)
     setError('')
@@ -162,14 +149,15 @@ const CreateEvent = () => {
             label='Location' 
             value={location}
             onChange={e => setLocation(e.target.value)}
-            required />
+            required
+          />
 
-          <Input type='datetime-local' 
-            label='Date and Time (Local)' 
-            min={minDateTime}
+          <Input type='text' 
+            label='Date and Time (Local)'
             value={dateTime}
             onChange={e => setDateTime(e.target.value)}
-            required />
+            required 
+          />
 
           <button type='submit' className='bg-blue flex justify-center items-center text-white text-center w-full rounded-md py-2 h-10'>
             {

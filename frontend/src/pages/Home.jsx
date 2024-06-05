@@ -52,7 +52,7 @@ const Home = () => {
 
       {/* Upcoming Events */}
       <section className='my-10'>
-        <h1 className='text-center text-3xl font-bold'>Upcomming Events</h1>
+        <h1 className='text-center text-3xl font-bold'>Newly Added Events</h1>
 
         <div className='my-5'>
           {

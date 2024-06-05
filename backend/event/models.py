@@ -21,7 +21,7 @@ class Event(BaseModel):
     description = models.TextField()
     image = models.ImageField(upload_to='images/')
     location = models.CharField(max_length=750)
-    date_time = models.DateTimeField()
+    date_and_time = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return self.title
