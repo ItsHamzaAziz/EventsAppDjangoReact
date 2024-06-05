@@ -88,5 +88,11 @@ def handle_event(request, pk):
         return Response({'message': 'Event deleted successfully', 'status': 200})
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_my_events(request):
+    events = Event.objects.filter(user=request.user).order_by('-created_at')
+    serializer = EventSerializer(events, many=True)
+    return Response(serializer.data)
 
 

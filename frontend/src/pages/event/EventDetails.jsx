@@ -6,8 +6,17 @@ import { ThreeCircles } from 'react-loader-spinner'
 import { jwtDecode } from 'jwt-decode'
 import { ACCESS_TOKEN } from '../../constants'
 import { Link } from 'react-router-dom'
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
+import { useNavigate } from 'react-router-dom'
 
 const EventDetails = () => {
+  const navigate = useNavigate()
   const { id } = useParams()
 
   const [event, setEvent] = useState({})
@@ -19,6 +28,12 @@ const EventDetails = () => {
   const [userIdToken, setUserIdToken] = useState(0)
 
   const [loading, setLoading] = useState(false)
+  const [loadingDelete, setLoadingDelete] = useState(false)
+
+  const [error, setError] = useState('')
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(!open)
 
   useEffect(() => {
     getEventDetails()
@@ -50,6 +65,25 @@ const EventDetails = () => {
     }
   }
 
+  const deleteEvent = () => {
+    setLoadingDelete(true)
+    api.delete(`/event/handle-event/${id}/`)
+      .then(response => {
+        if (response.status === 200) {
+          setLoadingDelete(false)
+          navigate('/my-events')
+        } else {
+          setError('An error occurred while deleting event.')
+          setLoadingDelete(false)
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        setError('An error occurred while deleting event.')
+        setLoadingDelete(false)
+      })
+  }
+
 
   return (
     <>
@@ -79,10 +113,56 @@ const EventDetails = () => {
               {
                 userId === userIdToken && (
                   <div className='text-white text-center md:text-left space-x-2'>
-                    <Link to={`/update-event/${ event.uuid }`}>
+                    <Link to={`/update-event/${event.uuid}`}>
                       <button className='bg-blue px-5 py-1 rounded'>Update</button>
                     </Link>
-                    <button className='bg-red px-5 py-1 rounded'>Delete</button>
+                    <button onClick={handleOpen} className='bg-red px-5 py-1 rounded'>Delete</button>
+
+                    <Dialog open={open} handler={handleOpen}>
+                      <DialogHeader>
+                        <div className='px-2'>
+                          Confirm Delete
+                        </div>
+                      </DialogHeader>
+                      <DialogBody className='text-black'>
+                        {
+                          error && (
+                            <div className='bg-red text-white p-2 mb-2 rounded'>
+                              { error }
+                            </div>
+                          )
+                        }
+                        <div className='px-2'>
+                          This action cannot be undone.
+                        </div>
+                      </DialogBody>
+
+                      <DialogFooter>
+                        <Button
+                          variant="text"
+                          color="red"
+                          onClick={handleOpen}
+                          className="mr-1"
+                        >
+                          <span>Cancel</span>
+                        </Button>
+                        <button className='bg-red text-white px-5 py-1 rounded h-8' onClick={deleteEvent}>
+                          {
+                            loadingDelete ? (
+                              <span className='flex items-center justify-center'>
+                                <ThreeCircles
+                                  color='white'
+                                  width={20}
+                                  height={20}
+                                />
+                              </span>
+                            ) : (
+                              'Delete'
+                            )
+                          }
+                        </button>
+                      </DialogFooter>
+                    </Dialog>
                   </div>
                 )
               }
