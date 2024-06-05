@@ -47,7 +47,7 @@ const UpdateEvent = () => {
     api.get(`/event/get-event-details/${id}/`)
       .then(response => {
         setEvent(response.data)
-        
+
         setTitle(response.data.title)
         setDescription(response.data.description)
         setLocation(response.data.location)
@@ -72,7 +72,7 @@ const UpdateEvent = () => {
 
 
     try {
-      const res = await api.put(`/event/handle-event/${ id }/`, { title, description, location, categorySelected, dateTime, image }, {
+      const res = await api.put(`/event/handle-event/${id}/`, { title, description, location, categorySelected, dateTime, image }, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -102,21 +102,7 @@ const UpdateEvent = () => {
       <section className='px-5 md:px-20 py-10'>
         <h1 className='text-4xl font-bold'>Update Event</h1>
 
-        {
-          error && (
-            <div className='text-center bg-red p-2 mt-5 text-white rounded-md'>
-              {error}
-            </div>
-          )
-        }
 
-        {
-          success && (
-            <div className='text-center bg-green p-2 mt-5 text-white rounded-md'>
-              {success}
-            </div>
-          )
-        }
 
         {
           loadingEventDetails ? (
@@ -134,13 +120,13 @@ const UpdateEvent = () => {
                 <Input type='text'
                   label='Event Title'
                   value={ title }
-                  onChange={e => setTitle(e.target.value)}
+                  onChange={ e => setTitle(e.target.value) }
                   required />
 
-                <Select label='Select Category' value={ categorySelected }>
+                <Select label='Select Category' value={categorySelected}>
                   {
                     categories.map(category => (
-                      <Option key={category.uuid} value={category.uuid} onClick={() => setCategorySelected(category.name)}>{category.name}</Option>
+                      <Option key={ category.uuid } value={ category.uuid } onClick={ () => setCategorySelected(category.name) }>{ category.name }</Option>
                     ))
                   }
                 </Select>
@@ -149,7 +135,7 @@ const UpdateEvent = () => {
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 <Textarea label='Event Description'
                   value={ description }
-                  onChange={e => setDescription(e.target.value)}
+                  onChange={ e => setDescription(e.target.value) }
                   required></Textarea>
 
                 <div className='border border-gray-400 rounded-md'>
@@ -176,7 +162,7 @@ const UpdateEvent = () => {
                       id="image"
                       name="image"
                       className='hidden'
-                      onChange={e => setImage(e.target.files[0])}
+                      onChange={ e => setImage(e.target.files[0]) }
                     />
                   </label>
                 </div>
@@ -184,16 +170,32 @@ const UpdateEvent = () => {
 
               <Input type='text'
                 label='Location'
-                value={location}
-                onChange={e => setLocation(e.target.value)}
+                value={ location }
+                onChange={ e => setLocation(e.target.value) }
                 required />
 
               <Input type='text'
                 label='Date and Time (Local)'
-                value={ dateTime }
-                onChange={e => setDateTime(e.target.value)}
+                value={  dateTime  }
+                onChange={  e => setDateTime(e.target.value)  }
                 required
               />
+
+              {
+                error && (
+                  <div className='text-center bg-red p-2 mt-5 text-white rounded-md'>
+                    { error }
+                  </div>
+                )
+              }
+
+              {
+                success && (
+                  <div className='text-center bg-green p-2 mt-5 text-white rounded-md'>
+                    { success }
+                  </div>
+                )
+              }
 
               <button type='submit' className='bg-blue flex justify-center items-center text-white text-center w-full rounded-md py-2 h-10'>
                 {

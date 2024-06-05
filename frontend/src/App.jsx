@@ -12,16 +12,16 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/my-events" element={<MyEvents />} />
-        <Route path="/logout" element={<Logout />} />
+        <Route path="/" element={ <Home /> } />
+        <Route path="/my-events" element={ <MyEvents /> } />
+        <Route path="/logout" element={ <Logout /> } />
 
-        <Route path="/browse-events" element={<BrowseEvents />} />
-        <Route path="/create-event" element={<CreateEvent />} />
-        <Route path="/event/:id" element={<EventDetails />} />
-        <Route path="/update-event/:id" element={<UpdateEvent />} />
+        <Route path="/browse-events" element={ <BrowseEvents /> } />
+        <Route path="/create-event" element={ <CreateEvent /> } />
+        <Route path="/event/:id" element={ <EventDetails /> } />
+        <Route path="/update-event/:id" element={ <UpdateEvent /> } />
         
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={ <NotFound /> } />
       </Routes>
     </BrowserRouter>
   )

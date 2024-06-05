@@ -56,7 +56,7 @@ const BrowseEvents = () => {
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 py-10'>
           <Input className='text-black'
             label='Search Event'
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={ e => setSearchTerm(e.target.value) }
           />
           <Select label='Filter by Categories'>
             {
@@ -80,7 +80,7 @@ const BrowseEvents = () => {
             <div className='grid grid-cols-1 md:grid-cols-2 laptop:grid-cols-3 gap-4 mx-5 md:mx-20 mb-10'>
               {
                 filteredEvents.map(event => (
-                  <Link key={event.uuid} to={`/event/${event.uuid}`}>
+                  <Link key={ event.uuid } to={`/event/${event.uuid}`}>
                     <div className='rounded-lg h-full border border-gray-300 shadow-md p-5 flex flex-col justify-between space-y-2'>
                       <div className='space-y-3'>
                         <img
@@ -90,12 +90,12 @@ const BrowseEvents = () => {
                         />
                         <h1 className='text-2xl font-bold'>{event.title}</h1>
                         <div>
-                          <p>{event.location}</p>
-                          <p>{event.date_time}</p>
+                          <p>{ event.location }</p>
+                          <p>{ event.date_and_time }</p>
                         </div>
                       </div>
 
-                      <p>Category: {event.category.name}</p>
+                      <p>Category: { event.category.name }</p>
                     </div>
                   </Link>
                 ))

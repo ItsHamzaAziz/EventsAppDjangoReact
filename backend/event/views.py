@@ -4,7 +4,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Event, Category
 from .serializers import CategorySerializer, EventSerializer
 from rest_framework.response import Response
-from datetime import datetime
 
 # Create your views here.
 @api_view(['GET'])

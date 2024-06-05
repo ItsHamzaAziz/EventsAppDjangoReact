@@ -7,7 +7,7 @@ import { ThreeCircles } from 'react-loader-spinner'
 
 const CreateEvent = () => {
   const [categories, setCategories] = useState([])
-  
+
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [location, setLocation] = useState('')
@@ -34,7 +34,7 @@ const CreateEvent = () => {
       })
   }
 
-  
+
   const handleSubmit = async (e) => {
     setLoading(true)
     setError('')
@@ -43,7 +43,13 @@ const CreateEvent = () => {
     e.preventDefault()
 
     if (!category) {
-      setError('Select a category')
+      setError('Select a Category')
+      setLoading(false)
+      return
+    }
+
+    if (!image) {
+      setError('Upload an Image')
       setLoading(false)
       return
     }
@@ -51,7 +57,7 @@ const CreateEvent = () => {
     try {
       const res = await api.post('/event/create-event/', { title, description, location, category, dateTime, image }, {
         headers: {
-            'Content-Type':'multipart/form-data'
+          'Content-Type': 'multipart/form-data'
         }
       })
 
@@ -66,6 +72,7 @@ const CreateEvent = () => {
     } catch (error) {
       console.log(error)
       setError('An error occurred')
+      setLoading(false)
     }
   }
 
@@ -75,30 +82,14 @@ const CreateEvent = () => {
 
       <section className='px-5 md:px-20 py-10'>
         <h1 className='text-4xl font-bold'>Create Event</h1>
-        
-        {
-          error && (
-            <div className='text-center bg-red p-2 mt-5 text-white rounded-md'>
-              { error }
-            </div>
-          )
-        }
-        
-        {
-          success && (
-            <div className='text-center bg-green p-2 mt-5 text-white rounded-md'>
-              { success }
-            </div>
-          )
-        }
 
-        <form onSubmit={handleSubmit} className='mt-10 space-y-4'>
+        <form onSubmit={ handleSubmit } className='mt-10 space-y-4'>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <Input type='text'
               label='Event Title'
-              value={title}
-              onChange={e => setTitle(e.target.value)}
+              value={ title }
+              onChange={ e => setTitle(e.target.value) }
               required />
 
             <Select label='Select Category'>
@@ -111,9 +102,9 @@ const CreateEvent = () => {
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <Textarea label='Event Description' 
-              value={description}
-              onChange={e => setDescription(e.target.value)}
+            <Textarea label='Event Description'
+              value={ description }
+              onChange={ e => setDescription(e.target.value) }
               required></Textarea>
 
             <div className='border border-gray-400 rounded-md'>
@@ -138,31 +129,46 @@ const CreateEvent = () => {
                   name="image"
                   id="image"
                   className='hidden'
-                  onChange={e => setImage(e.target.files[0])} 
-                  required 
+                  onChange={ e => setImage(e.target.files[0]) }
                 />
               </label>
             </div>
           </div>
 
-          <Input type='text' 
-            label='Location' 
-            value={location}
-            onChange={e => setLocation(e.target.value)}
+          <Input type='text'
+            label='Location'
+            value={ location }
+            onChange={ e => setLocation(e.target.value) }
             required
           />
 
-          <Input type='text' 
+          <Input type='text'
             label='Date and Time (Local)'
-            value={dateTime}
-            onChange={e => setDateTime(e.target.value)}
-            required 
+            value={ dateTime }
+            onChange={ e => setDateTime(e.target.value) }
+            required
           />
+
+          {
+            error && (
+              <div className='text-center bg-red p-2 mt-5 text-white rounded-md'>
+                { error }
+              </div>
+            )
+          }
+
+          {
+            success && (
+              <div className='text-center bg-green p-2 mt-5 text-white rounded-md'>
+                { success }
+              </div>
+            )
+          }
 
           <button type='submit' className='bg-blue flex justify-center items-center text-white text-center w-full rounded-md py-2 h-10'>
             {
               loading ? (
-                <ThreeCircles 
+                <ThreeCircles
                   color='white'
                   width={20}
                   height={20}
@@ -172,6 +178,7 @@ const CreateEvent = () => {
               )
             }
           </button>
+
         </form>
       </section>
     </ProtectedRoute>

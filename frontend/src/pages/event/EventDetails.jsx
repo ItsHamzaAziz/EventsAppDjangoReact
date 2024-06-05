@@ -106,8 +106,8 @@ const EventDetails = () => {
 
             <div className='py-5 space-y-5'>
               <div className='text-center md:text-left'>
-                <h1 className='font-bold text-3xl'>{event.title}</h1>
-                <p>Event by {username}</p>
+                <h1 className='font-bold text-3xl'>{ event.title }</h1>
+                <p>Event by { username }</p>
               </div>
 
               {
@@ -168,13 +168,13 @@ const EventDetails = () => {
               }
 
               <div>
-                <p><span className='font-bold'>Location:</span> {event.location}</p>
-                <p><span className='font-bold'>At:</span> {event.date_and_time}</p>
+                <p><span className='font-bold'>Location:</span> { event.location }</p>
+                <p><span className='font-bold'>At:</span> { event.date_and_time }</p>
               </div>
 
-              <p><span className='font-bold'>Category:</span> {category}</p>
+              <p><span className='font-bold'>Category:</span> { category }</p>
 
-              <p>{event.description}</p>
+              <p>{ event.description }</p>
             </div>
           </div>
         )

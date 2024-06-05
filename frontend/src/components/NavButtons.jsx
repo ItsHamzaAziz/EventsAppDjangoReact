@@ -9,12 +9,13 @@ import {
 } from "@material-tailwind/react";
 import api from '../api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { ThreeCircles } from 'react-loader-spinner';
 
 const NavButtons = () => {
     const navigate = useNavigate()
+    const location = useLocation()
 
     const [openRegister, setOpenRegister] = useState(false);
     const handleOpenRegister = () => {
@@ -81,7 +82,12 @@ const NavButtons = () => {
                 setLoadingLogin(false)
 
                 handleOpenLogin()
-                navigate('/')
+
+                if (location.pathname === '/'){
+                    navigate('/my-events')
+                } else {
+                    navigate('/')
+                }
             } else {
                 setErrorLogin("Invalid Credentials")
                 setLoadingLogin(false)
@@ -162,11 +168,11 @@ const NavButtons = () => {
                 !isAuthenticated ? (
                     <>
                         <span>
-                            <button onClick={handleOpenLogin} className='bg-green py-1 px-4 rounded'>Login</button>
+                            <button onClick={ handleOpenLogin } className='bg-green py-1 px-4 rounded'>Login</button>
                             <Dialog
                                 size="xs"
-                                open={openLogin}
-                                handler={handleOpenLogin}
+                                open={ openLogin }
+                                handler={ handleOpenLogin }
                                 className="bg-transparent shadow-none"
                             >
                                 <Card className="mx-auto w-full max-w-[24rem]">
@@ -177,23 +183,23 @@ const NavButtons = () => {
 
                                         {
                                             errorLogin && (
-                                                <div className='bg-red text-white text-center p-1 rounded-md'>{errorLogin}</div>
+                                                <div className='bg-red text-white text-center p-1 rounded-md'>{ errorLogin }</div>
                                             )
                                         }
 
                                         <Input label="Username"
                                             type='text'
                                             size="lg"
-                                            value={username}
-                                            onChange={e => setusername(e.target.value)} />
+                                            value={ username }
+                                            onChange={ e => setusername(e.target.value) } />
                                         <Input label="Password"
                                             size="lg"
                                             type='password'
-                                            value={password}
-                                            onChange={e => setPasswordLogin(e.target.value)} />
+                                            value={ password }
+                                            onChange={ e => setPasswordLogin(e.target.value) } />
                                     </CardBody>
                                     <CardFooter className="pt-0 space-y-2">
-                                        <button className='bg-green py-2 px-4 h-8 flex items-center justify-center rounded w-full text-white' onClick={loginUser}>
+                                        <button className='bg-green py-2 px-4 h-8 flex items-center justify-center rounded w-full text-white' onClick={ loginUser }>
                                             {
                                                 loadingLogin ? (
                                                     <ThreeCircles
@@ -206,7 +212,7 @@ const NavButtons = () => {
                                                 )
                                             }
                                         </button>
-                                        <button className='bg-red text-white py-1 px-4 h-8 rounded w-full' onClick={handleOpenLogin}>
+                                        <button className='bg-red text-white py-1 px-4 h-8 rounded w-full' onClick={ handleOpenLogin }>
                                             Close
                                         </button>
                                     </CardFooter>
@@ -215,11 +221,11 @@ const NavButtons = () => {
                         </span>
 
                         <span>
-                            <button onClick={handleOpenRegister} className='bg-blue py-1 px-4 rounded'>Register</button>
+                            <button onClick={ handleOpenRegister } className='bg-blue py-1 px-4 rounded'>Register</button>
                             <Dialog
                                 size="xs"
-                                open={openRegister}
-                                handler={handleOpenRegister}
+                                open={ openRegister }
+                                handler={ handleOpenRegister }
                                 className="bg-transparent shadow-none"
                             >
                                 <Card className="mx-auto w-full max-w-[24rem]">
@@ -230,20 +236,20 @@ const NavButtons = () => {
 
                                         {
                                             successRegister && (
-                                                <div className='bg-green text-white text-center p-1 rounded-md'>{successRegister}</div>
+                                                <div className='bg-green text-white text-center p-1 rounded-md'>{ successRegister }</div>
                                             )
                                         }
 
                                         {
                                             errorRegister && (
-                                                <div className='bg-red text-white text-center p-1 rounded-md'>{errorRegister}</div>
+                                                <div className='bg-red text-white text-center p-1 rounded-md'>{ errorRegister }</div>
                                             )
                                         }
 
                                         <Input label="Email"
                                             type='email'
                                             size="lg"
-                                            value={emailRegister}
+                                            value={ emailRegister }
                                             onChange={
                                                 e => setEmailRegister(e.target.value)
                                             }
@@ -251,7 +257,7 @@ const NavButtons = () => {
                                         <Input label="Username"
                                             type='text'
                                             size="lg"
-                                            value={usernameRegister}
+                                            value={ usernameRegister }
                                             onChange={
                                                 e => setUsernameRegister(e.target.value)
                                             }
@@ -259,7 +265,7 @@ const NavButtons = () => {
                                         <Input label="Password"
                                             type='password'
                                             size="lg"
-                                            value={passwordRegister}
+                                            value={ passwordRegister }
                                             onChange={
                                                 e => setPasswordRegister(e.target.value)
                                             }
@@ -267,14 +273,14 @@ const NavButtons = () => {
                                         <Input label="Re Enter Password"
                                             type='password'
                                             size="lg"
-                                            value={passwordRegister2}
+                                            value={ passwordRegister2 }
                                             onChange={
                                                 e => setPasswordRegister2(e.target.value)
                                             }
                                             required />
                                     </CardBody>
                                     <CardFooter className="pt-0 space-y-2">
-                                        <button className='bg-blue text-white flex items-center justify-center py-1 px-4 h-8 rounded w-full' onClick={registerUser}>
+                                        <button className='bg-blue text-white flex items-center justify-center py-1 px-4 h-8 rounded w-full' onClick={ registerUser }>
                                             {
                                                 loadingRegister ? (
                                                     <ThreeCircles
@@ -287,7 +293,7 @@ const NavButtons = () => {
                                                 )
                                             }
                                         </button>
-                                        <button className='bg-red text-white py-1 px-4 h-8 rounded w-full' onClick={handleOpenRegister}>
+                                        <button className='bg-red text-white py-1 px-4 h-8 rounded w-full' onClick={ handleOpenRegister }>
                                             Close
                                         </button>
                                     </CardFooter>

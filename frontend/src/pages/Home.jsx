@@ -66,7 +66,7 @@ const Home = () => {
               <div className='grid grid-cols-1 md:grid-cols-2 laptop:grid-cols-3 gap-4 mx-5 md:mx-20 mb-10'>
                 {
                   events.map(event => (
-                    <Link key={event.uuid} to={`/event/${event.uuid}`}>
+                    <Link key={ event.uuid } to={`/event/${event.uuid}`}>
                       <div className='rounded-lg h-full border border-gray-300 shadow-md p-5 flex flex-col justify-between space-y-2'>
                         <div className='space-y-3'>
                           <img
@@ -74,14 +74,14 @@ const Home = () => {
                             alt="Event Image"
                             className='w-full h-56 rounded-lg'
                           />
-                          <h1 className='text-2xl font-bold'>{event.title}</h1>
+                          <h1 className='text-2xl font-bold'>{ event.title }</h1>
                           <div>
-                            <p>{event.location}</p>
-                            <p>{event.date_time}</p>
+                            <p>{ event.location }</p>
+                            <p>{ event.date_time }</p>
                           </div>
                         </div>
 
-                        <p>Category: {event.category.name}</p>
+                        <p>Category: { event.category.name }</p>
                       </div>
                     </Link>
                   ))
