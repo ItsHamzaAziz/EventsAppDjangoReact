@@ -10,7 +10,7 @@ For the frontend I used ReactJS alongside Tailwind CSS for styling.
 Django and Django REST framework were used in the backend of this web app.
 
 # Authentication
-JWT (JSON Web Token) were used for authentication in this project
+JWT (JSON Web Tokens) were used for authentication in this project
 
 # Database
 I used Django's defualt SQLite database for this project.
