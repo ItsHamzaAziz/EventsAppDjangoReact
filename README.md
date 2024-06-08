@@ -1,4 +1,4 @@
-# Preview
+# Overview
 This is an events web application which allows users to view event listings and their details. Moreover authenticated users can share, edit and delete their events.
 <br>Additionally, the app features event search functionality and filtering by category for enhanced user experience.
 
